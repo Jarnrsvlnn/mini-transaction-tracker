@@ -13,6 +13,5 @@ It demonstrates how to:
   - **Net Total**
  
  ## 🔎 Notes
-- The date format used is `Jan 4, 2021`.  
 - This repository is **only a part of a bigger project** that will be expanded later on.  
 - For now, it focuses mainly on working with arrays, calculations, and basic templating.  
