@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /** OBJECIVES
  * 1. Create a function that is able to read
@@ -10,11 +10,30 @@ declare(strict_types = 1);
 
 // function to get the csv file and return it as an array
 
-function getTransactionFile(string $filename): array {
-    foreach(scandir(FILES_PATH) as $file) {
-        if (is_file($file)) {
-            
+function getTransactionFile(string $dirPath): array
+{
+    $filesArray = [];
+    foreach (scandir($dirPath) as $file) {
+        if (is_dir($file)) {
+            continue;
         }
+        $filesArray[] = $dirPath . $file;
     }
+
+    return $filesArray;
 }
 
+// function that loops through an array and gets the contents
+
+function readTransactionFile(array $fileArray): array{
+    $contents = [];
+    foreach($fileArray as $file) {
+        if(($csvFile = fopen($file, 'r')) !== false)  {
+            while(($fileContent = fgetcsv($csvFile, 1000, ','))) {
+                $contents[] = $fileContent;
+            }
+        }
+    }
+
+    return $contents;
+}
