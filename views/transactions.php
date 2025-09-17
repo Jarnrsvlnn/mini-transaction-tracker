@@ -41,10 +41,22 @@
             <?php if (! empty($fileContent)): ?>
                 <?php foreach ($fileContent as $transaction): ?>
                     <tr>
-                        <td><?= $transaction['date'] ?></td>
+                        <td><?= formatTransactionDate($transaction['date']) ?></td>
                         <td><?= $transaction['checkNumber'] ?></td>
                         <td><?= $transaction['description'] ?></td>
-                        <td><?= '$' . $transaction['amount'] ?></td>
+                        <td>
+                            <?php if ($transaction['amount'] > 0): ?>
+                                <span style="color: green;">
+                                    <?= formatTransactionAmount($transaction['amount']) ?>
+                                </span>
+                            <?php elseif ($transaction['amount'] < 0): ?>
+                                <span style="color: red;">
+                                    <?= formatTransactionAmount($transaction['amount']) ?>
+                                </span>
+                            <?php else: ?>
+                                <?= formatTransactionAmount($transaction['amount']) ?>
+                            <?php endif ?>
+                        </td>
                     </tr>
                 <?php endforeach ?>
             <?php endif ?>
@@ -52,15 +64,15 @@
         <tfoot>
             <tr>
                 <th colspan="3">Total Income:</th>
-                <td><?= $totals['income'] ?></td>
+                <td><?= formatTransactionAmount($totals['income']) ?></td>
             </tr>
             <tr>
                 <th colspan="3">Total Expense:</th>
-                <td><?= $totals['expense'] ?></td>
+                <td><?= formatTransactionAmount($totals['expense']) ?></td>
             </tr>
             <tr>
                 <th colspan="3">Net Total:</th>
-                <td><?= $totals['net'] ?></td>
+                <td><?= formatTransactionAmount($totals['net']) ?></td>
             </tr>
         </tfoot>
     </table>

@@ -57,14 +57,14 @@ function extractTransaction(array $transactionRow): array
     ];
 }
 
-function calculateTransactions(array $transactions): array {
+function calculateTransactions(array $transactions): array
+{
     $totalTransactions = ['income' => 0, 'expense' => 0, 'net' => 0];
 
-    foreach($transactions as $transaction) {
+    foreach ($transactions as $transaction) {
         if ($transaction['amount'] >= 0) { // checks if the amount is income
             $totalTransactions['income'] += $transaction['amount'];
-        }
-        else { // checks if the amount is an expense
+        } else { // checks if the amount is an expense
             $totalTransactions['expense'] += $transaction['amount'];
         }
     }
