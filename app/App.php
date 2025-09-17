@@ -23,17 +23,39 @@ function getTransactionFile(string $dirPath): array
     return $filesArray;
 }
 
-// function that loops through an array and gets the contents
+// function that loops through an array and gets the contents then returns as an array
 
-function readTransactionFile(array $fileArray): array{
+function readTransactionFile(array $fileArray): array
+{
     $contents = [];
-    foreach($fileArray as $file) {
-        if(($csvFile = fopen($file, 'r')) !== false)  {
-            while(($fileContent = fgetcsv($csvFile, 1000, ','))) {
-                $contents[] = $fileContent;
+    foreach ($fileArray as $file) {
+        if (($csvFile = fopen($file, 'r')) !== false) {
+            while (($fileContent = fgetcsv($csvFile, 1000, ','))) {
+                $contents[] = extractTransaction($fileContent);
             }
         }
     }
 
     return $contents;
+}
+
+/**
+ * this function extracts each description to able to do something with them
+ * , for example it extracts only the number and removes all of the symbols
+ * that may disrupt our calculation on amount later on
+ */
+
+function extractTransaction(array $transactionRow): array
+{
+    [$date, $checkNumber, $description, $amount] = $transactionRow;
+
+    $findSymbols = ['$', ','];
+    $amount = (float) str_replace($findSymbols, '', $amount);
+
+    return [
+        'date' => $date,
+        'checkNumber' => $checkNumber,
+        'description' => $description,
+        'amount' => $amount
+    ];
 }

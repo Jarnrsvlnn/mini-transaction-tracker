@@ -9,11 +9,9 @@ define('FILES_PATH', $root . 'transaction_files' . DIRECTORY_SEPARATOR);
 define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 
 require_once APP_PATH . "App.php";
-require_once VIEWS_PATH . "transactions.php";
 
 $fileContainer = getTransactionFile(FILES_PATH); // returns an array of csv files
+$fileContent = [];
 $fileContent = readTransactionFile($fileContainer);
 
-echo '<pre>';
-print_r($fileContent);
-echo '<pre/>';
+require_once VIEWS_PATH . "transactions.php";
