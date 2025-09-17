@@ -2,12 +2,6 @@
 
 declare(strict_types=1);
 
-/** OBJECIVES
- * 1. Create a function that is able to read
- * every csv file in the transaction_files directory
- * 2. Store those collected data inside an array
- */
-
 // function to get the csv file and return it as an array
 
 function getTransactionFile(string $dirPath): array
@@ -25,12 +19,15 @@ function getTransactionFile(string $dirPath): array
 
 // function that loops through an array and gets the contents then returns as an array
 
-function readTransactionFile(array $fileArray): array
+function readTransactionFile(array $fileArray, ?callable $transactionHandler = null): array
 {
     $contents = [];
     foreach ($fileArray as $file) {
         if (($csvFile = fopen($file, 'r')) !== false) {
             while (($fileContent = fgetcsv($csvFile, 1000, ','))) {
+                if ($transactionHandler !== null) {
+                    $fileContent = $transactionHandler($fileContent);
+                }
                 $contents[] = extractTransaction($fileContent);
             }
         }
@@ -58,4 +55,21 @@ function extractTransaction(array $transactionRow): array
         'description' => $description,
         'amount' => $amount
     ];
+}
+
+function calculateTransactions(array $transactions): array {
+    $totalTransactions = ['income' => 0, 'expense' => 0, 'net' => 0];
+
+    foreach($transactions as $transaction) {
+        if ($transaction['amount'] >= 0) { // checks if the amount is income
+            $totalTransactions['income'] += $transaction['amount'];
+        }
+        else { // checks if the amount is an expense
+            $totalTransactions['expense'] += $transaction['amount'];
+        }
+    }
+
+    $totalTransactions['net'] = $totalTransactions['income'] + $totalTransactions['expense'];
+
+    return $totalTransactions;
 }

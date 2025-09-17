@@ -14,4 +14,6 @@ $fileContainer = getTransactionFile(FILES_PATH); // returns an array of csv file
 $fileContent = [];
 $fileContent = readTransactionFile($fileContainer);
 
+$totals = calculateTransactions($fileContent);
+
 require_once VIEWS_PATH . "transactions.php";
